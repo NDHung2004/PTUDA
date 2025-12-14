@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_predict"
+        android:title="Dự tính điểm cần thi"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_calculate_final"
+        android:title="Tính điểm tổng kết"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_clear_all"
+        android:title="Xóa toàn bộ dữ liệu"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_about"
+        android:title="Giới thiệu"
+        app:showAsAction="never" />
+</menu>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#1565C0</color>
+    <color name="colorPrimaryVariant">#0D47A1</color>
+    <color name="colorSecondary">#FFB300</color>
+    <color name="colorSecondaryVariant">#FFA000</color>
+
+    <color name="colorBackground">#F5F7FA</color> <color name="colorSurface">#FFFFFF</color> <color name="colorTextPrimary">#212121</color> <color name="colorTextSecondary">#757575</color> <color name="score_A">#4CAF50</color> <color name="score_B">#8BC34A</color> <color name="score_C">#FFC107</color> <color name="score_D">#FF9800</color> <color name="score_F">#F44336</color> <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="my_note_background">#FFFFFF</color>
+</resources>
