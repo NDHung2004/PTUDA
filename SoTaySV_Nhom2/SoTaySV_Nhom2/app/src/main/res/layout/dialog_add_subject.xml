@@ -82,10 +82,10 @@
 
             <TextView
                 android:id="@+id/textView"
-                android:layout_width="165dp"
+                android:layout_width="261dp"
                 android:layout_height="32dp"
                 android:layout_weight="1"
-                android:text="Hệ số"
+                android:text="Hệ số (TX1-TX2)"
                 android:textSize="16sp" />
 
             <Spinner
