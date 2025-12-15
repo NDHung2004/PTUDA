@@ -3,7 +3,7 @@ package com.example.sotaysv_nhom2.Models;
 import java.util.List;
 
 public class GradeUtils {
-    public static double calculateSubjectScoreHaUI(double processScore, double finalExamScore) {
+    public static double calculateSubjectScoreHaUI(double processScore, double finalExamScore,String coefficient) {
         double z = (processScore + (finalExamScore * 2)) / 3;
         return (double) Math.round(z * 10) / 10;
     }

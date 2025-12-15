@@ -136,26 +136,36 @@ public class CalculateFinalActivity extends AppCompatActivity {
         return score;
     }
 
-    private double[] calculateData() throws Exception {
+    private double calculateData(String coefficient) throws Exception {
+        String[] phan_tu = coefficient.split("-");
+        int coefficient_tx1 = Integer.parseInt(phan_tu[0])/10;
+        int coefficient_tx2 = Integer.parseInt(phan_tu[1])/10;
         double tx1 = getValidScore(edtTx1, "TX1");
         double tx2 = getValidScore(edtTx2, "TX2");
         double exam = getValidScore(edtExam, "Điểm thi");
-        double processScore;
-        if (inputLayoutTx3.getVisibility() == View.VISIBLE) {
-            double tx3 = getValidScore(edtTx3, "Giữa kỳ");
-            processScore = (tx1 + tx2 + tx3) / 3;
-        } else {
-            processScore = (tx1 + tx2) / 2;
-        }
-        double finalScore = GradeUtils.calculateSubjectScoreHaUI(processScore, exam);
-        return new double[]{processScore, finalScore};
+        double finalScore = (tx1*coefficient_tx1 + tx2*coefficient_tx2 + exam*(10-coefficient_tx1-coefficient_tx2))/10;
+        return finalScore;
+
+
+
     }
 
     private void calculateScore(boolean isSaving) {
         try {
+            Subject existingSubject = null;
+            for (Subject s : allSubjectsList) {
+                if (s.getName().equalsIgnoreCase(edtName.getText().toString().trim())) {
+                    existingSubject = s;
+                    break;
+                }
+            }
+            String coefficient="10-20";
+            if(existingSubject != null){
+                coefficient = existingSubject.getCoefficient();
+            }
             if(isSaving) validateInfo();
-            double[] result = calculateData();
-            double finalScore = result[1];
+
+            double finalScore = calculateData(coefficient);
             String letter = GradeUtils.convertToLetter(finalScore);
             double scale4 = GradeUtils.convertToScale4(finalScore);
             tvScore.setText(String.valueOf(finalScore));
@@ -168,8 +178,8 @@ public class CalculateFinalActivity extends AppCompatActivity {
     private void saveToSubject() {
         try {
             validateInfo();
-            double[] result = calculateData();
-            double finalScore = result[1];
+
+            double finalScore = calculateData("10-20");
 
             String name = edtName.getText().toString().trim();
             int credits = Integer.parseInt(edtCredits.getText().toString());
@@ -185,6 +195,7 @@ public class CalculateFinalActivity extends AppCompatActivity {
             }
 
             if (existingSubject != null) {
+                finalScore = calculateData(existingSubject.getCoefficient());
                 // CẬP NHẬT (Dùng ID cũ)
                 Subject updateSubject = new Subject(
                         existingSubject.getId(),
@@ -195,7 +206,7 @@ public class CalculateFinalActivity extends AppCompatActivity {
                 Toast.makeText(this, "Đã cập nhật điểm môn: " + name, Toast.LENGTH_SHORT).show();
             } else {
                 // THÊM MỚI
-                Subject newSubject = new Subject(0, "", name,"", credits, finalScore, semester);
+                Subject newSubject = new Subject(0, "", name,"10-20", credits, finalScore, semester);
                 dbHelper.addSubject(newSubject);
                 Toast.makeText(this, "Đã thêm môn mới: " + name, Toast.LENGTH_SHORT).show();
             }

@@ -160,12 +160,14 @@ public class CalculateTargetActivity extends AppCompatActivity {
         return val;
     }
 
-    private double[] calculateRequiredScoreAndGetData() throws Exception {
+    private double calculateRequiredScoreAndGetData(String coefficient) throws Exception {
         double targetZ = 8.5;
         int pos = spinnerTarget.getSelectedItemPosition();
         if(pos==1) targetZ=8.0; else if(pos==2) targetZ=7.0; else if(pos==3) targetZ=6.5;
         else if(pos==4) targetZ=5.5; else if(pos==5) targetZ=5.0; else if(pos==6) targetZ=4.0;
-
+        String[] phan_tu = coefficient.split("-");
+        int coefficient_tx1 = Integer.parseInt(phan_tu[0])/10;
+        int coefficient_tx2 = Integer.parseInt(phan_tu[1])/10;
         double tx1 = getValidScore(edtTx1, "TX1");
         double tx2 = getValidScore(edtTx2, "TX2");
 
@@ -174,17 +176,37 @@ public class CalculateTargetActivity extends AppCompatActivity {
             double tx3 = getValidScore(edtTx3, "GK");
             avgX = (tx1 + tx2 + tx3) / 3;
         } else {
-            avgX = (tx1 + tx2) / 2;
+            avgX = tx1*coefficient_tx1+tx2*coefficient_tx2;
         }
 
-        double requiredY = (3 * targetZ - avgX) / 2;
-        return new double[]{avgX, requiredY};
+        double requiredY = (targetZ*10-avgX)/(10-coefficient_tx1-coefficient_tx2);
+        return requiredY;
     }
 
     private void calculateRequiredScore() {
         try {
+            String creditsStr = edtCredits.getText().toString().trim();
+            if (creditsStr.isEmpty()) throw new Exception("Chưa nhập số tín chỉ!");
+            int credits = Integer.parseInt(creditsStr);
+
+            String subjectName = edtSubjectName.getText().toString().trim();
+            String gradeTarget = spinnerTarget.getSelectedItem().toString();
+
+            if (subjectName.isEmpty()) throw new Exception("Nhập tên môn học!");
             if(edtCredits.getText().toString().isEmpty()) throw new Exception("Nhập tín chỉ!");
-            double requiredY = calculateRequiredScoreAndGetData()[1];
+            double requiredY = calculateRequiredScoreAndGetData("10-20");
+            Subject existingSubject = null;
+            for (Subject s : allSubjectsList) {
+                if (s.getName().equalsIgnoreCase(subjectName)) {
+                    existingSubject = s;
+                    break;
+                }
+            }
+            if(existingSubject!=null) {
+                requiredY = calculateRequiredScoreAndGetData(existingSubject.getCoefficient());
+            }else{
+                Toast.makeText(this, "Môn học chưa có đang tính điểm hệ sô TX1-TX2 là 10-20" + subjectName, Toast.LENGTH_SHORT).show();
+            }
 
             if (requiredY > 10) {
                 tvResult.setText("Cần thi: " + String.format("%.1f", requiredY) + "\n(Quá sức!)");
@@ -216,8 +238,8 @@ public class CalculateTargetActivity extends AppCompatActivity {
             if (subjectName.isEmpty()) throw new Exception("Nhập tên môn học!");
 
             // Tính toán kết quả
-            double[] data = calculateRequiredScoreAndGetData();
-            double requiredY = data[1];
+            ;
+            double requiredY = calculateRequiredScoreAndGetData("10-20");
 
             // 2. TÌM HOẶC TẠO MÔN HỌC (QUAN TRỌNG)
             String targetSubjectCode = ""; // Mã môn để liên kết
@@ -232,6 +254,8 @@ public class CalculateTargetActivity extends AppCompatActivity {
             }
 
             if (existingSubject != null) {
+                requiredY = calculateRequiredScoreAndGetData(existingSubject.getCoefficient());
+
                 // Còn nếu muốn chặn:
                 if (!existingSubject.isStudying()) {
                     Toast.makeText(this, "Lưu ý: Môn này đã có điểm tổng kết rồi!", Toast.LENGTH_SHORT).show();
@@ -243,7 +267,7 @@ public class CalculateTargetActivity extends AppCompatActivity {
                 targetSubjectCode = "MH_" + java.util.UUID.randomUUID().toString();
 
                 // Tạo môn mới với mã vừa sinh
-                Subject newSubject = new Subject(0, targetSubjectCode, subjectName,"", credits, -1.0, 1);
+                Subject newSubject = new Subject(0, targetSubjectCode, subjectName,"10-20", credits, -1.0, 1);
                 databaseHelper.addSubject(newSubject);
 
                 Toast.makeText(this, "Đã tạo môn học mới: " + subjectName, Toast.LENGTH_SHORT).show();
