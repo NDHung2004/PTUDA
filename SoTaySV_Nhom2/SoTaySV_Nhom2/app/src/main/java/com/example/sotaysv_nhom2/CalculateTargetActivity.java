@@ -61,8 +61,8 @@ public class CalculateTargetActivity extends AppCompatActivity {
 
         // Setup Spinner
         List<String> grades = new ArrayList<>();
-        grades.add("A (8.5)"); grades.add("B+ (8.0)"); grades.add("B (7.0)");
-        grades.add("C+ (6.5)"); grades.add("C (5.5)"); grades.add("D+ (5.0)"); grades.add("D (4.0)");
+        grades.add("A (8.5)"); grades.add("B+ (7.7)"); grades.add("B (7.0)");
+        grades.add("C+ (6.2)"); grades.add("C (5.5)"); grades.add("D+ (4.7)"); grades.add("D (4.0)");
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, grades);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerTarget.setAdapter(adapter);
@@ -163,8 +163,8 @@ public class CalculateTargetActivity extends AppCompatActivity {
     private double calculateRequiredScoreAndGetData(String coefficient) throws Exception {
         double targetZ = 8.5;
         int pos = spinnerTarget.getSelectedItemPosition();
-        if(pos==1) targetZ=8.0; else if(pos==2) targetZ=7.0; else if(pos==3) targetZ=6.5;
-        else if(pos==4) targetZ=5.5; else if(pos==5) targetZ=5.0; else if(pos==6) targetZ=4.0;
+        if(pos==1) targetZ=7.7; else if(pos==2) targetZ=7.0; else if(pos==3) targetZ=6.2;
+        else if(pos==4) targetZ=5.5; else if(pos==5) targetZ=4.7; else if(pos==6) targetZ=4.0;
         String[] phan_tu = coefficient.split("-");
         int coefficient_tx1 = Integer.parseInt(phan_tu[0])/10;
         int coefficient_tx2 = Integer.parseInt(phan_tu[1])/10;

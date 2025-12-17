@@ -33,7 +33,7 @@ public class SubjectListFragment extends Fragment {
     // View
     private RecyclerView rvFilter, rvSubjects;
     private ExtendedFloatingActionButton fabAdd;
-    String[] coeffinient = {"20-20","15-15","10-20"};
+    String[] coeffinient = {"20-20","15-15","10-20","20-30"};
     // Adapter & Data
     private FilterAdapter filterAdapter;
     private SubjectAdapter subjectAdapter;
